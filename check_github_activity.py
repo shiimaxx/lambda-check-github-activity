@@ -3,8 +3,6 @@
 import datetime
 import os
 
-from pytz import timezone
-
 from github import Github
 
 
@@ -21,7 +19,7 @@ if __name__ == "__main__":
             recently_event = event
             break
 
-    jst_created_at = timezone("Asia/Tokyo").localize(event.created_at)
+    jst_created_at = event.created_at + datetime.timedelta(hours=9)
     recently_event_date = jst_created_at.date()
 
     if current_date > recently_event_date:
