@@ -1,11 +1,10 @@
 rules:
-- name: sample-rule-name
-  description: This is a sample CloudWatchEvent
-  schedule: rate(5 minutes)
+- name: check_github_activity
+  description: check_github_activity
+  schedule: cron(0 12 * * ? *)
   targets:
-  - id: <unique-target-id>
+  - id: check_github_activity
     input:
       this:
       - is: a
       - sample: input
-    input_path: json.path.format
