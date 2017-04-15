@@ -3,26 +3,27 @@
 import datetime
 import json
 import os
-import urllib
+import urllib2
+
+import lamvery
 
 from github import Github
 
 
 GITHUB_USER = os.environ["GITHUB_USER"]
 GITHUB_LOGIN_USER = os.environ["GITHUB_LOGIN_USER"]
-GITHUB_LOGIN_PASSWORD = os.environ["GITHUB_LOGIN_PASSWORD"]
-SLACK_WEBHOOK_URL = os.environ["SLACK_WEBHOOK_URL"]
+GITHUB_LOGIN_PASSWORD = lamvery.secret.get('GITHUB_LOGIN_PASSWORD')
+SLACK_WEBHOOK_URL = lamvery.secret.get('SLACK_WEBHOOK_URL')
 
 
 def to_slack(text):
     json_data = json.dumps({"text": text}).encode("utf-8")
-    headers = {"Content-Type": "application/json"}
-    requests = urllib.request.Request(
-            SLACK_WEBHOOK_URL, data=json_data, headers=headers)
+    req = urllib2.Request(SLACK_WEBHOOK_URL)
+    req.add_data(json_data)
+    req.add_header("Content-Type", "application/json")
+    urllib2.urlopen(req)
 
-    response = urllib.request.urlopen(requests)
-
-    return response
+    return
 
 
 def lambda_handler(event, context):
@@ -38,7 +39,7 @@ def lambda_handler(event, context):
         recently_github_event.created_at + datetime.timedelta(hours=9)
     recently_event_date = jst_created_at.date()
 
-    if current_date == recently_event_date:
-        response = to_slack("Shut the fuck up and write some code.")
+    if current_date > recently_event_date:
+        to_slack("Shut the fuck up and write some code.")
 
-    return response.status
+    return
