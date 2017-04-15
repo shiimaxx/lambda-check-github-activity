@@ -4,7 +4,7 @@ versioning: false
 default_alias: null
 clean_build: false
 configuration:
-  name: lambda-functions
+  name: check_github_activity
   runtime: python2.7
   role: {{ env['AWS_LAMBDA_ROLE'] }}
   handler: check_github_activity.lambda_handler
