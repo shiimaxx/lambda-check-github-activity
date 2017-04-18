@@ -4,7 +4,3 @@ rules:
   schedule: cron(0 12 * * ? *)
   targets:
   - id: check_github_activity
-    input:
-      this:
-      - is: a
-      - sample: input
